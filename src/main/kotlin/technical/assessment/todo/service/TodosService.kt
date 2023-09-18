@@ -85,7 +85,6 @@ class TodosService @Autowired constructor(private val todoRepository: TodoReposi
     }
 
     fun mapTodoResponse(todo: Todo): TodoResponse {
-
         return TodoResponse().apply {
             id = todo.id
             description = todo.description
