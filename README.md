@@ -15,4 +15,6 @@ I've decided to use an Exception Handler class to manage exceptions and present 
 
 The API is exposed on localhost port 8080.
 
+I've used Java 17 as the SDK
+
 
