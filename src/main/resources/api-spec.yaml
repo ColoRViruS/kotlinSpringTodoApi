@@ -1,0 +1,245 @@
+openapi: 3.0.3
+info:
+  title: Technical Assessment ToDo App
+  description: API Todo Technical Assessment
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Localhost
+paths:
+  /todo/list:
+    get:
+      tags:
+        - todos
+      summary: get todo list
+      description: get todo list
+      operationId: getTodos
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todoListResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+
+  /todo/postTodos:
+    post:
+      tags:
+        - todos
+      summary: add list of todos
+      description: add list of todos
+      operationId: postTodos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/postTodosRequest'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+
+  /todo/{id}:
+    get:
+      tags:
+        - todos
+      summary: get specific todo
+      description: get specific todo
+      operationId: getTodo
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Identifier of reg
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todoResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+        '404':
+          description: No Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+    patch:
+      tags:
+        - todos
+      summary: patch specific todo
+      description: patch specific todo
+      operationId: patchTodo
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Identifier of reg
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/todoRequest'
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+        '404':
+          description: No Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+    delete:
+      tags:
+        - todos
+      summary: detete specific todo
+      description: detete specific todo
+      operationId: deteteTodo
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Identifier of reg
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+        '404':
+          description: No Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientFriendlyException'
+
+components:
+  schemas:
+    todoListResponse:
+      type: object
+      properties:
+        todos:
+          type: array
+          items:
+            $ref: '#/components/schemas/todoResponse'
+
+    todoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        description:
+          type: string
+          example: "Buy Milk"
+        dateAdded:
+          type: string
+          format: date
+          example: "2022-01-22"
+        dueDate:
+          type: string
+          format: date
+          example: "2023-01-22"
+        daysLeft:
+          type: integer
+          example: 3
+        status:
+          $ref: '#/components/schemas/todoStatus'
+          example: Done
+
+    postTodosRequest:
+      type: object
+      properties:
+        todos:
+          type: array
+          items:
+            $ref: '#/components/schemas/todoRequest'
+
+    todoRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          example: "Buy Milk"
+        dueDate:
+          type: string
+          format: date
+          example: "2023-01-22"
+        status:
+          $ref: '#/components/schemas/todoStatus'
+          example: Done
+
+    todoStatus:
+      type: string
+      enum:
+        - Done
+        - Cancelled
+        - Open
+
+    clientFriendlyException:
+      type: object
+      properties:
+        reason:
+          type: string
